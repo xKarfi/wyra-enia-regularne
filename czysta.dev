@@ -1,62 +1,82 @@
-[Project]
-FileName=czysta.dev
-Name=czysta
-Type=1
-Ver=2
-ObjFiles=
-Includes=
-Libs=
-PrivateResource=
-ResourceIncludes=
-MakeIncludes=
-Compiler=
-CppCompiler=
-Linker=
-IsCpp=1
-Icon=
-ExeOutput=
-ObjectOutput=
-LogOutput=
-LogOutputEnabled=0
-OverrideOutput=0
-OverrideOutputName=
-HostApplication=
-UseCustomMakefile=0
-CustomMakefile=
-CommandLine=
-Folders=
-IncludeVersionInfo=0
-SupportXPThemes=0
-CompilerSet=0
-CompilerSettings=0000000000000000000000000
-UnitCount=1
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <regex>
 
-[VersionInfo]
-Major=1
-Minor=0
-Release=0
-Build=0
-LanguageID=1033
-CharsetID=1252
-CompanyName=
-FileVersion=
-FileDescription=Developed using the Dev-C++ IDE
-InternalName=
-LegalCopyright=
-LegalTrademarks=
-OriginalFilename=
-ProductName=
-ProductVersion=
-AutoIncBuildNr=0
-SyncProduct=1
+using namespace std;
 
-[Unit1]
-FileName=msddsaain.cpp
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+struct ludzie
+{
+        string imie, nazwisko, status;
+        int wiek;
+};
 
+class spis
+{
+	 vector <struct ludzie> lista;
+
+       ifstream p1;
+       ofstream p2;
+
+  public:
+
+void otworz()
+{
+    p1.open("p1.txt");
+    p2.open("p2.txt");
+}
+
+
+
+
+
+void sprawdz()
+{
+
+	struct ludzie wprowadz;
+	 regex imie("[A-Z]{1}[a-z]+");
+	regex nazwisko("[A-Z]{1}[a-z]+");
+	 while(!p1.eof())
+	{
+		p1>>wprowadz.imie>>wprowadz.nazwisko>>wprowadz.wiek;
+		if(regex_match(wprowadz.imie, imie) && regex_match(wprowadz.nazwisko, nazwisko))
+		{
+			wprowadz.status = "OK";
+		}
+		 else 
+		{
+			wprowadz.status = "ERROR";
+		}
+		lista.push_back(wprowadz);
+
+	}
+	
+	for (vector<struct ludzie>::iterator it = lista.begin(); it != lista.end(); ++it)
+	  {
+                p2<<"{\"imie\":\""<<it->imie<<"\", \"nazwisko\":\""<<it->nazwisko<<"\", \"wiek\":\""<<it->wiek<<"\", \"status\":\""<<it->status<<"\"}\n";
+        }
+
+	
+
+}
+
+
+
+
+void zamknij()
+{
+    p1.close();
+    p2.close();
+}
+
+};
+int main()
+{
+
+spis s1;
+s1.otworz();
+s1.sprawdz();
+s1.zamknij();
+
+    return 0;
+}
